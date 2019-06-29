@@ -16,6 +16,7 @@ add_executable( test1 tests/checkCalibrator.cpp )
 target_include_directories( test1 PRIVATE
   .
   ${EIGEN3_INCLUDE_DIR}
+	${Boost_INCLUDE_DIRS}
 )
 target_link_libraries( test1
   eightPointCalibrator
