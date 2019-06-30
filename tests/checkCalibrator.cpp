@@ -9,9 +9,18 @@
 
 using namespace Eigen;
 
-BOOST_FIXTURE_TEST_CASE( blank_image, CalibratorFixture )
+BOOST_FIXTURE_TEST_CASE( cube1 , CalibratorFixture )
 {
-	Vector3d cameraTranslation(5.0,5.0,5.0);
-	Matrix3d cameraRotation = AxisAngled(0.75*M_PI, Vector3d::UnitZ())
-		                      * AxisAngled(0.25*M_PI, Vector3d::UnitX());
+  AffineTransform cameraPose = getCameraPose1();
+  std::vector<Vector3f> cubePoints = getCubePoints1();
+  std::vector<Vector3f> cameraPoints = transformPoints(cameraPose.inverse(), cubePoints);
+  std::vector<Vector2f> imagePoints = getImagePoints(cameraPoints, cameraIntrinsics);
+  eight_point_calibrator::cameraParams resultParams = eight_point_calibrator::calibrate(cubePoints, imagePoints);  
+  CameraExtrinsics truthExtrinsics = {cameraPose.rotation(), cameraPose.translation()};
+  eight_point_calibrator::cameraParams truthParams(cameraIntrinsics, truthExtrinsics);
+  std::cout << "Truth params:\n\n";
+  std::cout << eight_point_calibrator::to_string(truthParams) << "\n\n";
+  std::cout << "Result params:\n\n";
+  std::cout << eight_point_calibrator::to_string(resultParams) << "\n\n";
+  std::cout << std::flush;
 }

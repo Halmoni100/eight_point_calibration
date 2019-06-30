@@ -4,6 +4,6 @@
 
 struct CameraExtrinsics
 {
-  Eigen::Matrix3d Rot;
-  Eigen::Vector3d Trans;
+  Eigen::Matrix3f Rot;
+  Eigen::Vector3f Trans;
 };

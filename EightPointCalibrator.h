@@ -10,9 +10,12 @@ namespace eight_point_calibrator {
 
   typedef std::pair<CameraIntrinsics, CameraExtrinsics> cameraParams;
 
-  cameraParams calibrate(
-    std::vector<Eigen::Vector3d> worldPoints,
-    std::vector<Eigen::Vector2d> cameraPoints
+  std::string to_string(cameraParams params);
+
+  bool calibrate(
+    const std::vector<Eigen::Vector3f>& worldPoints,
+    const std::vector<Eigen::Vector2f>& imagePoints,
+    cameraParams& paramsResult
   );
 
-} // namesapce eight_point_calibrator
+} // namespace eight_point_calibrator

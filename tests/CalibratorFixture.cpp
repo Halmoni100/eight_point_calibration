@@ -27,7 +27,7 @@ CalibratorFixture::AffineTransform CalibratorFixture::getCameraPose1()
   cameraRotation = AngleAxisf(0.25*M_PI, Vector3f::UnitZ()) 
                  * AngleAxisf(-0.75*M_PI, Vector3f::UnitY())
 		             * AngleAxisf(0.5*M_PI, Vector3f::UnitZ());
-	AffineTransform cameraPose1 = Translation3f(cameraTranslation) * cameraRotation;
+	AffineTransform cameraPose1 = cameraRotation * Translation3f(cameraTranslation);
 	return cameraPose1;	
 }
 
@@ -39,3 +39,16 @@ std::vector<Vector3f> CalibratorFixture::transformPoints(AffineTransform transfo
 	return transformedPoints;
 }
 
+std::vector<Vector2f> getImagePoints(std::vector<Vector3f> cameraPoints, CameraIntrinsics intrinsics)
+{
+  
+  std::vector<Vector2f> imagePoints;
+  for (const Vector3f& cameraPoint: cameraPoints) {
+    float x_image = -intrinsics.f_x * cameraPoint(0) / cameraPoint(2);
+    float f_y = intrinsics.f_x / intrinsics.aspectRatio;
+    float y_image = -f_y * cameraPoint(1) / cameraPoint(2);
+    Vector2f newImagePoint(x_image, y_image);
+    imagePoints.push_back(newImagePoint);
+  }
+  return imagePoints; 
+}
