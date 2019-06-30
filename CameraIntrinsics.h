@@ -3,5 +3,5 @@
 struct CameraIntrinsics
 {
   float aspectRatio;
-	float f_x;
+  float f_x;
 };
