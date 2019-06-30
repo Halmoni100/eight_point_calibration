@@ -3,40 +3,15 @@
 
 #include <iostream>
 #include <Eigen/Dense>
-#include "eightPointCalibrator.h"
 
-struct CalibratorFixture
+#include "CalibratorFixture.h"
+#include "EightPointCalibrator.h"
+
+using namespace Eigen;
+
+BOOST_FIXTURE_TEST_CASE( blank_image, CalibratorFixture )
 {
-	CalibratorFixture() :
-		initSize(10,10),
-		imgDepth(CV_8U)
-	{
-	  blankImg = cv::Mat::zeros(initSize, imgDepth);
-		solidImg = cv::Mat::ones(initSize, imgDepth);
-	}
-  std::vector<Eigen::
-	cv::Size initSize; 
-	int imgDepth;
-  cv::Mat blankImg;
-  cv::Mat solidImg;
-
-	void testWithinTolerance(float testVal, float truthVal, float tolerance)
-	{
-		bool withinTolerance = abs(testVal - truthVal) < tolerance;
-		BOOST_TEST(withinTolerance);
-	}
-
-	void testEigenvalues(std::pair<float,float> testVal, std::pair<float,float> truthVal)
-	{
-		float tolerance = 0.001;
-		testWithinTolerance(testVal.first, truthVal.first, tolerance);
-		testWithinTolerance(testVal.second, truthVal.second, tolerance);
-  }
-};
-
-BOOST_FIXTURE_TEST_CASE( blank_image, ComputeEigenvaluesFixture )
-{
-  std::pair<float,float> eigenvalues = getEigenvaluesOfGradientCovariance(blankImg.clone());
-  std::pair<float,float> truth_eigenvalues(0,0);
-	testEigenvalues(eigenvalues, truth_eigenvalues);
-}  
+	Vector3d cameraTranslation(5.0,5.0,5.0);
+	Matrix3d cameraRotation = AxisAngled(0.75*M_PI, Vector3d::UnitZ())
+		                      * AxisAngled(0.25*M_PI, Vector3d::UnitX());
+}
