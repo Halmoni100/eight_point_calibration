@@ -39,13 +39,12 @@ std::vector<Vector3f> CalibratorFixture::transformPoints(AffineTransform transfo
 	return transformedPoints;
 }
 
-std::vector<Vector2f> getImagePoints(std::vector<Vector3f> cameraPoints, CameraIntrinsics intrinsics)
+std::vector<Vector2f> CalibratorFixture::getImagePoints(std::vector<Vector3f> cameraPoints, float aspectRatio, float f_x)
 {
-  
   std::vector<Vector2f> imagePoints;
   for (const Vector3f& cameraPoint: cameraPoints) {
-    float x_image = -intrinsics.f_x * cameraPoint(0) / cameraPoint(2);
-    float f_y = intrinsics.f_x / intrinsics.aspectRatio;
+    float x_image = -f_x * cameraPoint(0) / cameraPoint(2);
+    float f_y = f_x / aspectRatio;
     float y_image = -f_y * cameraPoint(1) / cameraPoint(2);
     Vector2f newImagePoint(x_image, y_image);
     imagePoints.push_back(newImagePoint);

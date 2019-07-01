@@ -14,8 +14,9 @@ BOOST_FIXTURE_TEST_CASE( cube1 , CalibratorFixture )
   AffineTransform cameraPose = getCameraPose1();
   std::vector<Vector3f> cubePoints = getCubePoints1();
   std::vector<Vector3f> cameraPoints = transformPoints(cameraPose.inverse(), cubePoints);
-  std::vector<Vector2f> imagePoints = getImagePoints(cameraPoints, cameraIntrinsics);
-  eight_point_calibrator::cameraParams resultParams = eight_point_calibrator::calibrate(cubePoints, imagePoints);  
+  std::vector<Vector2f> imagePoints = getImagePoints(cameraPoints, cameraIntrinsics.aspectRatio, cameraIntrinsics.f_x);
+  eight_point_calibrator::cameraParams resultParams;
+  BOOST_TEST(eight_point_calibrator::calibrate(cubePoints, imagePoints, resultParams)); 
   CameraExtrinsics truthExtrinsics = {cameraPose.rotation(), cameraPose.translation()};
   eight_point_calibrator::cameraParams truthParams(cameraIntrinsics, truthExtrinsics);
   std::cout << "Truth params:\n\n";

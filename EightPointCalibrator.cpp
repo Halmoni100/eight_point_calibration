@@ -20,8 +20,8 @@ namespace eight_point_calibrator {
     return ss.str();
   }
 
-  bool calibrate(std::vector<Vector3f> worldPoints,
-                 std::vector<Vector2f> imagePoints,
+  bool calibrate(const std::vector<Vector3f>& worldPoints,
+                 const std::vector<Vector2f>& imagePoints,
                  cameraParams& paramsResult)
   {
     // Make sure we have all correspondences for world and image points
@@ -32,7 +32,7 @@ namespace eight_point_calibrator {
     assert(numPoints >= 7);
 
     // Construct A matrix
-    Matrix<float,Dynamic,8> A = MatrixXf::Zero(numPoints,8); 
+    Matrix<float,Dynamic,8> A = Matrix<float,Dynamic,8>::Zero(numPoints,8); 
 
     for (int i = 0; i < numPoints; i++) {
       float x_i, y_i, X_w_i, Y_w_i, Z_w_i;
@@ -111,8 +111,8 @@ namespace eight_point_calibrator {
     }
 
     // Solve for T_z and f_x
-    Matrix<float,Dynamic,2> A2;
-    Matrix<float,Dynamic,1> b;
+    Matrix<float,Dynamic,2> A2 = Matrix<float,Dynamic,2>::Zero(numPoints,2);
+    Matrix<float,Dynamic,1> b = Matrix<float,Dynamic,1>::Zero(numPoints,1);
     for (int i = 0; i < numPoints; i++)
     {
       float x_i, r11, r12, r13, r31, r32, r33, X_w_i, Y_w_i, Z_w_i, T_x;
@@ -125,8 +125,8 @@ namespace eight_point_calibrator {
       A2(i,1) = r11*X_w_i + r12*Y_w_i + r13*Z_w_i + T_x;
       b(i) = -x_i * (r31*X_w_i + r32*Y_w_i + r33*Z_w_i); 
     }
-    JacobiSVD leastSquaresSolver(A2);
-    Matrix2f leastSquaresSolution = leastSquaresSolver.solve(b);
+    JacobiSVD leastSquaresSolver(A2, ComputeFullU | ComputeFullV);
+    Vector2f leastSquaresSolution = leastSquaresSolver.solve(b);
     trans(2) = leastSquaresSolution(0);
     float f_x = leastSquaresSolution(1);
 

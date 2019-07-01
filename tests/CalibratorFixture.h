@@ -19,5 +19,5 @@ struct CalibratorFixture
   AffineTransform getCameraPose1();
 
 	std::vector<Vector3f> transformPoints(AffineTransform transform, std::vector<Vector3f> points);
-  std::vector<Vector2f> getImagePoints(std::vector<Vector3f> cameraPoints, CameraIntrinsics intrinsics);
+  std::vector<Vector2f> getImagePoints(std::vector<Vector3f> cameraPoints, float aspectRatio, float f_x);
 };

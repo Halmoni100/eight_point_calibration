@@ -29,6 +29,7 @@ target_link_libraries( calibratorFixture
 add_executable( test1 tests/checkCalibrator.cpp )
 target_include_directories( test1 PRIVATE
   .
+  tests
   ${EIGEN3_INCLUDE_DIR}
 	${Boost_INCLUDE_DIRS}
 )
