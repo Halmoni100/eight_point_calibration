@@ -16,7 +16,7 @@ namespace eight_point_calibrator {
     ss << "\taxis: [" << rotation.axis()(0) << "," << rotation.axis()(1) << "," << rotation.axis()(2) << "]\n";
     ss << "\tangle: " << rotation.angle() << "\n";
     Vector3f translation = params.second.Trans;
-    ss << "Translation: [" <<  translation(0) << "," << translation(1) << "," << translation(2) << "\n";
+    ss << "Translation: [" <<  translation(0) << "," << translation(1) << "," << translation(2) << "]\n";
     return ss.str();
   }
 

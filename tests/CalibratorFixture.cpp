@@ -1,4 +1,5 @@
 #include "CalibratorFixture.h"
+#include <iostream>
 
 using namespace Eigen;
 
@@ -27,7 +28,7 @@ CalibratorFixture::AffineTransform CalibratorFixture::getCameraPose1()
   cameraRotation = AngleAxisf(0.25*M_PI, Vector3f::UnitZ()) 
                  * AngleAxisf(-0.75*M_PI, Vector3f::UnitY())
 		             * AngleAxisf(0.5*M_PI, Vector3f::UnitZ());
-	AffineTransform cameraPose1 = cameraRotation * Translation3f(cameraTranslation);
+	AffineTransform cameraPose1 = Translation3f(cameraTranslation) * cameraRotation; 
 	return cameraPose1;	
 }
 
